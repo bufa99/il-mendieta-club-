@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>IL.MENDIETA CLUB</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+      background: #151515;
+      border: 1px solid #2d2d2d;
+      border-radius: 24px;
+      padding: 35px 25px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+    }
+
+    .logo {
+      width: 75px;
+      height: 75px;
+      border: 2px solid #d4af5f;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      color: #d4af5f;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 27px;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #d4af5f;
+      font-size: 12px;
+      letter-spacing: 3px;
+      margin-top: 10px;
+      margin-bottom: 35px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #bbb;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      background: #0d0d0d;
+      border: 1px solid #333;
+      border-radius: 12px;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #d4af5f;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      background: #d4af5f;
+      color: #111;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .info {
+      text-align: center;
+      margin-top: 25px;
+      color: #888;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .reward {
+      margin-top: 20px;
+      padding: 15px;
+      background: #101010;
+      border: 1px solid #292929;
+      border-radius: 12px;
+      text-align: center;
+      color: #d4af5f;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="logo">
+      IM
+    </div>
+
+    <h1>IL.MENDIETA CLUB</h1>
+
+    <div class="subtitle">
+      CORTÁ • SUMÁ • GANÁ
+    </div>
+
+    <form id="registro">
+
+      <label>Nombre</label>
+
+      <input
+        type="text"
+        id="nombre"
+        placeholder="Ingresá tu nombre"
+        required
+      >
+
+      <label>WhatsApp</label>
+
+      <input
+        type="tel"
+        id="whatsapp"
+        placeholder="Ingresá tu WhatsApp"
+        required
+      >
+
+      <button type="submit">
+        UNIRME AL CLUB
+      </button>
+
+    </form>
+
+    <div class="info">
+      ✂️ Cada corte suma 10 puntos<br>
+      📲 Historia etiquetando +5 puntos<br>
+      👤 Traer un cliente nuevo +20 puntos
+    </div>
+
+    <div class="reward">
+      🏆 100 PUNTOS = CORTE GRATIS
+    </div>
+
+  </div>
+
+  <script>
+
+    document
+      .getElementById("registro")
+      .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const nombre =
+          document.getElementById("nombre").value;
+
+        alert(
+          "¡Bienvenido al IL.MENDIETA CLUB, " +
+          nombre +
+          "! 🔥"
+        );
+
+      });
+
+  </script>
+
+</body>
+</html>
