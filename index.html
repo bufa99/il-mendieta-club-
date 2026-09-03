@@ -311,9 +311,6 @@ document.getElementById("registro").addEventListener("submit", async function(ev
   }
 
 });
-
-
-
 async function buscarCliente() {
 
   const whatsapp = document.getElementById("whatsappLogin").value.trim();
@@ -343,130 +340,145 @@ async function buscarCliente() {
     const clientes = await respuesta.json();
 
     if (!clientes.length) {
-      mensaje.textContent = "No encontramos un cliente con ese WhatsApp.";
+      mensaje.textContent =
+        "No encontramos un cliente con ese WhatsApp.";
       return;
     }
 
     const cliente = clientes[0];
 
- const respuestaMovimientos = await fetch(
-  SUPABASE_URL +
-  "/rest/v1/movimientos?cliente_id=eq." +
-  cliente.id +
-  "&select=accion,puntos,created_at&order=created_at.desc",
-  {
-    method: "GET",
-    headers: {
-      "apikey": SUPABASE_KEY,
-      "Authorization": "Bearer " + SUPABASE_KEY
-    }
-  }
-);
+    const respuestaMovimientos = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/movimientos?cliente_id=eq." +
+      cliente.id +
+      "&select=accion,puntos,created_at&order=created_at.desc",
+      {
+        method: "GET",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY
+        }
+      }
+    );
 
-const movimientos = await respuestaMovimientos.json();
+    const movimientos = await respuestaMovimientos.json();
 
-let historialHTML = "";
+    let historialHTML = "";
 
-if (movimientos.length === 0) {
+    if (movimientos.length === 0) {
 
-  historialHTML = `
-    <p style="color:#888; margin-top:20px;">
-      Todavía no tenés movimientos.
-    </p>
-  `;
+      historialHTML = `
+        <p style="color:#888; margin-top:20px;">
+          Todavía no tenés movimientos.
+        </p>
+      `;
 
-} else {
+    } else {
 
-  historialHTML = `
-    <div style="margin-top:25px; text-align:left;">
+      historialHTML = `
+        <div style="margin-top:25px; text-align:left;">
 
-      <h3 style="color:#d4af5f; margin-bottom:15px;">
-        HISTORIAL
-      </h3>
+          <h3 style="color:#d4af5f; margin-bottom:15px;">
+            HISTORIAL
+          </h3>
 
-      ${movimientos.map(movimiento => `
-        <div style="
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          padding:12px 0;
-          border-bottom:1px solid #292929;
-        ">
+          ${movimientos.map(movimiento => `
+            <div style="
+              display:flex;
+              justify-content:space-between;
+              align-items:center;
+              padding:12px 0;
+              border-bottom:1px solid #292929;
+            ">
 
-          <span>
-            ${movimiento.accion}
-          </span>
+              <span>
+                ${movimiento.accion}
+              </span>
 
-          <strong style="color:#d4af5f;">
-            ${movimiento.puntos > 0 ? "+" : ""}${movimiento.puntos} puntos
-          </strong>
+              <strong style="color:#d4af5f;">
+                ${movimiento.puntos > 0 ? "+" : ""}${movimiento.puntos} puntos
+              </strong>
+
+            </div>
+          `).join("")}
 
         </div>
-      `).join("")}
+      `;
 
-    </div>
-  `;
+    }
 
-}
-
-mensaje.innerHTML = `
-  <div style="
-    margin-top: 20px;
-    padding: 20px;
-    background: #101010;
-    border: 1px solid #d4af5f;
-    border-radius: 16px;
-    text-align: center;
-  ">
-
-    <h2 style="color:#d4af5f; margin-bottom:10px;">
-      ¡Hola ${cliente.nombre}! 👋
-    </h2>
-
-    <p style="font-size:32px; font-weight:bold; margin:10px 0;">
-      ${cliente.puntos}
-      <span style="font-size:14px; color:#aaa;">PUNTOS</span>
-    </p>
-
-    <div style="
-      width:100%;
-      height:12px;
-      background:#292929;
-      border-radius:20px;
-      overflow:hidden;
-      margin:20px 0 10px;
-    ">
-
+    mensaje.innerHTML = `
       <div style="
-        width:${Math.min(cliente.puntos, 100)}%;
-        height:100%;
-        background:#d4af5f;
-        border-radius:20px;
-      "></div>
+        margin-top:20px;
+        padding:20px;
+        background:#101010;
+        border:1px solid #d4af5f;
+        border-radius:16px;
+        text-align:center;
+      ">
 
-    </div>
+        <h2 style="color:#d4af5f; margin-bottom:10px;">
+          ¡Hola ${cliente.nombre}! 👋
+        </h2>
 
-    <p style="color:#aaa;">
-      Te faltan ${Math.max(100 - cliente.puntos, 0)} puntos para tu corte gratis ✂️
-    </p>
+        <p style="
+          font-size:32px;
+          font-weight:bold;
+          margin:10px 0;
+        ">
+          ${cliente.puntos}
+          <span style="font-size:14px; color:#aaa;">
+            PUNTOS
+          </span>
+        </p>
 
-    ${historialHTML}
+        <div style="
+          width:100%;
+          height:12px;
+          background:#292929;
+          border-radius:20px;
+          overflow:hidden;
+          margin:20px 0 10px;
+        ">
 
-  </div>
-`;
+          <div style="
+            width:${Math.min(cliente.puntos, 100)}%;
+            height:100%;
+            background:#d4af5f;
+            border-radius:20px;
+          "></div>
+
+        </div>
+
+        <p style="color:#aaa;">
+          Te faltan ${Math.max(100 - cliente.puntos, 0)}
+          puntos para tu corte gratis ✂️
+        </p>
+
+        ${historialHTML}
+
+      </div>
+    `;
+
   } catch (error) {
 
     console.error(error);
-    mensaje.textContent = "No pudimos consultar tus puntos.";
+
+    mensaje.textContent =
+      "No pudimos consultar tus puntos.";
 
   }
-
 }
+
+
 function mostrarAcceso() {
 
   document.getElementById("acceso").style.display = "block";
+
 }
-  function mostrarAdmin() {
+
+
+function mostrarAdmin() {
 
   document.getElementById("adminLogin").style.display = "block";
 
@@ -475,13 +487,20 @@ function mostrarAcceso() {
 
 async function iniciarAdmin() {
 
-  const email = document.getElementById("adminEmail").value.trim();
-  const password = document.getElementById("adminPassword").value;
-  const mensaje = document.getElementById("mensajeAdmin");
+  const email =
+    document.getElementById("adminEmail").value.trim();
+
+  const password =
+    document.getElementById("adminPassword").value;
+
+  const mensaje =
+    document.getElementById("mensajeAdmin");
 
   if (!email || !password) {
 
-    mensaje.textContent = "Completá email y contraseña.";
+    mensaje.textContent =
+      "Completá email y contraseña.";
+
     return;
 
   }
@@ -489,7 +508,8 @@ async function iniciarAdmin() {
   try {
 
     const respuesta = await fetch(
-      SUPABASE_URL + "/auth/v1/token?grant_type=password",
+      SUPABASE_URL +
+      "/auth/v1/token?grant_type=password",
       {
         method: "POST",
 
@@ -511,14 +531,20 @@ async function iniciarAdmin() {
 
       console.error(datos);
 
-      mensaje.textContent = "Email o contraseña incorrectos.";
+      mensaje.textContent =
+        "Email o contraseña incorrectos.";
+
       return;
 
     }
 
-    localStorage.setItem("admin_token", datos.access_token);
+    localStorage.setItem(
+      "admin_token",
+      datos.access_token
+    );
 
-    mensaje.textContent = "¡Acceso correcto! 🔥";
+    mensaje.textContent =
+      "¡Acceso correcto! 🔥";
 
     setTimeout(function() {
 
@@ -530,10 +556,14 @@ async function iniciarAdmin() {
 
     console.error(error);
 
-    mensaje.textContent = "No pudimos conectar con el servidor.";
+    mensaje.textContent =
+      "No pudimos conectar con el servidor.";
 
   }
+
 }
+
+
 function mostrarPanelAdmin() {
 
   document.getElementById("adminLogin").style.display = "none";
@@ -541,19 +571,29 @@ function mostrarPanelAdmin() {
   document.getElementById("panelAdmin").style.display = "block";
 
 }
-  async function buscarClienteAdmin() {
 
-  const whatsapp = document.getElementById("whatsappAdmin").value.trim();
-  const resultado = document.getElementById("resultadoAdmin");
+
+async function buscarClienteAdmin() {
+
+  const whatsapp =
+    document.getElementById("whatsappAdmin").value.trim();
+
+  const resultado =
+    document.getElementById("resultadoAdmin");
 
   if (!whatsapp) {
-    resultado.innerHTML = "Ingresá un WhatsApp.";
+
+    resultado.innerHTML =
+      "Ingresá un WhatsApp.";
+
     return;
+
   }
 
   try {
 
-    const token = localStorage.getItem("admin_token");
+    const token =
+      localStorage.getItem("admin_token");
 
     const respuesta = await fetch(
       SUPABASE_URL +
@@ -562,6 +602,7 @@ function mostrarPanelAdmin() {
       "&select=id,nombre,whatsapp,puntos",
       {
         method: "GET",
+
         headers: {
           "apikey": SUPABASE_KEY,
           "Authorization": "Bearer " + token
@@ -580,11 +621,13 @@ function mostrarPanelAdmin() {
       `;
 
       return;
+
     }
 
     const cliente = clientes[0];
 
     resultado.innerHTML = `
+
       <div style="
         padding:20px;
         background:#101010;
@@ -607,12 +650,56 @@ function mostrarPanelAdmin() {
           margin:20px 0;
         ">
           ${cliente.puntos}
-          <span style="font-size:14px; color:#aaa;">
+
+          <span style="
+            font-size:14px;
+            color:#aaa;
+          ">
             PUNTOS
           </span>
+
         </p>
 
+        <h3 style="
+          color:#d4af5f;
+          margin:25px 0 15px;
+        ">
+          SUMAR PUNTOS
+        </h3>
+
+        <button
+          type="button"
+          onclick="sumarPuntos(${cliente.id}, 'Corte', 10)"
+          style="margin-bottom:10px;"
+        >
+          ✂️ CORTE +10
+        </button>
+
+        <button
+          type="button"
+          onclick="sumarPuntos(${cliente.id}, 'Historia de Instagram', 5)"
+          style="margin-bottom:10px;"
+        >
+          📸 HISTORIA +5
+        </button>
+
+        <button
+          type="button"
+          onclick="sumarPuntos(${cliente.id}, 'Cliente nuevo', 20)"
+        >
+          👥 CLIENTE NUEVO +20
+        </button>
+
+        <p
+          id="mensajePuntos"
+          style="
+            margin-top:20px;
+            color:#d4af5f;
+          "
+        ></p>
+
       </div>
+
     `;
 
   } catch (error) {
@@ -628,6 +715,75 @@ function mostrarPanelAdmin() {
   }
 
 }
+
+
+async function sumarPuntos(clienteId, accion, puntos) {
+
+  if (!confirm(
+    `¿Agregar ${puntos} puntos por "${accion}"?`
+  )) {
+
+    return;
+
+  }
+
+  try {
+
+    const token =
+      localStorage.getItem("admin_token");
+
+    const respuesta = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/rpc/agregar_puntos",
+      {
+        method: "POST",
+
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + token,
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          p_cliente_id: clienteId,
+          p_accion: accion,
+          p_puntos: puntos
+        })
+      }
+    );
+
+    if (!respuesta.ok) {
+
+      const error = await respuesta.text();
+
+      console.error(error);
+
+      alert("No se pudieron sumar los puntos.");
+
+      return;
+
+    }
+
+    alert(
+      `¡Se sumaron ${puntos} puntos! 🔥`
+    );
+
+    buscarClienteAdmin();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "No pudimos conectar con el servidor."
+    );
+
+  }
+
+}
+
+
+
 </script>
 </body>
 </html>
