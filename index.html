@@ -852,7 +852,11 @@ async function canjearCorte(clienteId) {
   }
 }
 
+const parametros = new URLSearchParams(window.location.search);
 
+if (parametros.get("admin") === "1") {
+  document.getElementById("adminLogin").style.display = "block";
+}
 </script>
 </body>
 </html>
