@@ -885,6 +885,43 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
 });
+  document.addEventListener("DOMContentLoaded", function() {
+
+  const parametros = new URLSearchParams(window.location.search);
+
+  if (parametros.get("cliente") === "1") {
+
+    const acceso = document.getElementById("acceso");
+
+    if (acceso) {
+      acceso.style.display = "none";
+    }
+
+    const botonCliente = document.querySelector(
+      'button[onclick="mostrarAcceso()"]'
+    );
+
+    if (botonCliente) {
+      botonCliente.style.display = "none";
+    }
+
+    const botonAdmin = document.querySelector(
+      'button[onclick="mostrarAdmin()"]'
+    );
+
+    if (botonAdmin) {
+      botonAdmin.style.display = "none";
+    }
+
+    const adminLogin = document.getElementById("adminLogin");
+
+    if (adminLogin) {
+      adminLogin.style.display = "none";
+    }
+
+  }
+
+});
 </script>
 </body>
 </html>
