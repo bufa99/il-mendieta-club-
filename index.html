@@ -175,26 +175,74 @@
 
   </div>
 
-  <script>
+<script>
 
-    document
-      .getElementById("registro")
-      .addEventListener("submit", function(event) {
+const SUPABASE_URL = "PEGÁ_ACÁ_TU_PROJECT_URL";
+const SUPABASE_KEY = "PEGÁ_ACÁ_TU_PUBLISHABLE_KEY";
 
-        event.preventDefault();
+document.getElementById("registro").addEventListener("submit", async function(event) {
 
-        const nombre =
-          document.getElementById("nombre").value;
+  event.preventDefault();
 
-        alert(
-          "¡Bienvenido al IL.MENDIETA CLUB, " +
-          nombre +
-          "! 🔥"
-        );
+  const nombre = document.getElementById("nombre").value.trim();
+  const whatsapp = document.getElementById("whatsapp").value.trim();
 
-      });
+  if (!nombre || !whatsapp) {
+    alert("Completá todos los campos.");
+    return;
+  }
 
-  </script>
+  try {
+
+    const respuesta = await fetch(
+      SUPABASE_URL + "/rest/v1/clientes",
+      {
+        method: "POST",
+
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+
+        body: JSON.stringify({
+          nombre: nombre,
+          whatsapp: whatsapp
+        })
+      }
+    );
+
+    if (!respuesta.ok) {
+
+      const error = await respuesta.text();
+
+      console.error(error);
+
+      alert("No pudimos crear tu cuenta. Intentá nuevamente.");
+
+      return;
+    }
+
+    alert(
+      "¡Bienvenido al IL.MENDIETA CLUB, " +
+      nombre +
+      "! 🔥"
+    );
+
+    document.getElementById("registro").reset();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("No pudimos conectarnos con el servidor.");
+
+  }
+
+});
+
+</script>
 
 </body>
 </html>
