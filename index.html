@@ -852,11 +852,18 @@ async function canjearCorte(clienteId) {
   }
 }
 
-const parametros = new URLSearchParams(window.location.search);
+document.addEventListener("DOMContentLoaded", function() {
 
-if (parametros.get("admin") === "1") {
-  document.getElementById("adminLogin").style.display = "block";
-}
+  const parametros = new URLSearchParams(window.location.search);
+
+  if (parametros.get("admin") === "1") {
+
+    document.getElementById("acceso").style.display = "none";
+    document.getElementById("adminLogin").style.display = "block";
+
+  }
+
+});
 </script>
 </body>
 </html>
