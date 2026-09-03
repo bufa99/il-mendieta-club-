@@ -858,8 +858,29 @@ document.addEventListener("DOMContentLoaded", function() {
 
   if (parametros.get("admin") === "1") {
 
-    document.getElementById("acceso").style.display = "none";
     document.getElementById("adminLogin").style.display = "block";
+
+    const formularioRegistro = document.getElementById("registro");
+
+    if (formularioRegistro) {
+      formularioRegistro.style.display = "none";
+    }
+
+    const botonCliente = document.querySelector(
+      'button[onclick="mostrarAcceso()"]'
+    );
+
+    if (botonCliente) {
+      botonCliente.style.display = "none";
+    }
+
+    const botonAdmin = document.querySelector(
+      'button[onclick="mostrarAdmin()"]'
+    );
+
+    if (botonAdmin) {
+      botonAdmin.style.display = "none";
+    }
 
   }
 
