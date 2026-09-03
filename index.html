@@ -162,6 +162,29 @@
       </button>
 
     </form>
+    <div style="margin-top: 15px;">
+  <button type="button" onclick="mostrarAcceso()">
+    YA SOY CLIENTE
+  </button>
+</div>
+
+<div id="acceso" style="display:none; margin-top:25px;">
+
+  <label>WhatsApp</label>
+
+  <input
+    type="tel"
+    id="whatsappLogin"
+    placeholder="Ingresá tu WhatsApp"
+  >
+
+  <button type="button" onclick="buscarCliente()">
+    VER MIS PUNTOS
+  </button>
+
+  <p id="mensajeLogin" style="margin-top:15px; text-align:center;"></p>
+
+</div>
 
     <div class="info">
       ✂️ Cada corte suma 10 puntos<br>
@@ -288,7 +311,10 @@ async function buscarCliente() {
   }
 
 }
+function mostrarAcceso() {
 
+  document.getElementById("acceso").style.display = "block";
+}
 </script>
 </body>
 </html>
