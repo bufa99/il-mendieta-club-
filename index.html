@@ -216,6 +216,27 @@
   <p id="mensajeAdmin" style="margin-top:15px; text-align:center;"></p>
 
 </div>
+    <div id="panelAdmin" style="display:none; margin-top:25px;">
+
+  <h2 style="text-align:center; color:#d4af5f; margin-bottom:20px;">
+    PANEL ADMIN 🔐
+  </h2>
+
+  <label>WhatsApp del cliente</label>
+
+  <input
+    type="tel"
+    id="whatsappAdmin"
+    placeholder="Ingresá el WhatsApp"
+  >
+
+  <button type="button" onclick="buscarClienteAdmin()">
+    BUSCAR CLIENTE
+  </button>
+
+  <div id="resultadoAdmin" style="margin-top:20px;"></div>
+
+</div>
     <div class="info">
       ✂️ Cada corte suma 10 puntos<br>
       📲 Historia etiquetando +5 puntos<br>
@@ -513,7 +534,13 @@ async function iniciarAdmin() {
 
   }
 }
+function mostrarPanelAdmin() {
 
+  document.getElementById("adminLogin").style.display = "none";
+
+  document.getElementById("panelAdmin").style.display = "block";
+
+}
 </script>
 </body>
 </html>
