@@ -185,7 +185,37 @@
   <p id="mensajeLogin" style="margin-top:15px; text-align:center;"></p>
 
 </div>
+<div style="margin-top: 15px;">
+  <button type="button" onclick="mostrarAdmin()">
+    🔐 ADMIN
+  </button>
+</div>
 
+<div id="adminLogin" style="display:none; margin-top:25px;">
+
+  <label>Email</label>
+
+  <input
+    type="email"
+    id="adminEmail"
+    placeholder="Email de administrador"
+  >
+
+  <label>Contraseña</label>
+
+  <input
+    type="password"
+    id="adminPassword"
+    placeholder="Contraseña"
+  >
+
+  <button type="button" onclick="iniciarAdmin()">
+    INGRESAR
+  </button>
+
+  <p id="mensajeAdmin" style="margin-top:15px; text-align:center;"></p>
+
+</div>
     <div class="info">
       ✂️ Cada corte suma 10 puntos<br>
       📲 Historia etiquetando +5 puntos<br>
@@ -415,6 +445,75 @@ function mostrarAcceso() {
 
   document.getElementById("acceso").style.display = "block";
 }
+  function mostrarAdmin() {
+
+  document.getElementById("adminLogin").style.display = "block";
+
+}
+
+
+async function iniciarAdmin() {
+
+  const email = document.getElementById("adminEmail").value.trim();
+  const password = document.getElementById("adminPassword").value;
+  const mensaje = document.getElementById("mensajeAdmin");
+
+  if (!email || !password) {
+
+    mensaje.textContent = "Completá email y contraseña.";
+    return;
+
+  }
+
+  try {
+
+    const respuesta = await fetch(
+      SUPABASE_URL + "/auth/v1/token?grant_type=password",
+      {
+        method: "POST",
+
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      }
+    );
+
+    const datos = await respuesta.json();
+
+    if (!respuesta.ok) {
+
+      console.error(datos);
+
+      mensaje.textContent = "Email o contraseña incorrectos.";
+      return;
+
+    }
+
+    localStorage.setItem("admin_token", datos.access_token);
+
+    mensaje.textContent = "¡Acceso correcto! 🔥";
+
+    setTimeout(function() {
+
+      mostrarPanelAdmin();
+
+    }, 500);
+
+  } catch (error) {
+
+    console.error(error);
+
+    mensaje.textContent = "No pudimos conectar con el servidor.";
+
+  }
+
+
 </script>
 </body>
 </html>
