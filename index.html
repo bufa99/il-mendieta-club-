@@ -661,35 +661,47 @@ async function buscarClienteAdmin() {
         </p>
 
         <h3 style="
-          color:#d4af5f;
-          margin:25px 0 15px;
-        ">
-          SUMAR PUNTOS
-        </h3>
+  color:#d4af5f;
+  margin:25px 0 15px;
+">
+  SUMAR PUNTOS
+</h3>
 
-        <button
-          type="button"
-          onclick="sumarPuntos(${cliente.id}, 'Corte', 10)"
-          style="margin-bottom:10px;"
-        >
-          ✂️ CORTE +10
-        </button>
+<button
+  type="button"
+  onclick="sumarPuntos(${cliente.id}, 'Corte', 10)"
+  style="margin-bottom:10px;"
+>
+  ✂️ CORTE +10
+</button>
 
-        <button
-          type="button"
-          onclick="sumarPuntos(${cliente.id}, 'Historia de Instagram', 5)"
-          style="margin-bottom:10px;"
-        >
-          📸 HISTORIA +5
-        </button>
+<button
+  type="button"
+  onclick="sumarPuntos(${cliente.id}, 'Historia de Instagram', 5)"
+  style="margin-bottom:10px;"
+>
+  📸 HISTORIA +5
+</button>
 
-        <button
-          type="button"
-          onclick="sumarPuntos(${cliente.id}, 'Cliente nuevo', 20)"
-        >
-          👥 CLIENTE NUEVO +20
-        </button>
+<button
+  type="button"
+  onclick="sumarPuntos(${cliente.id}, 'Cliente nuevo', 20)"
+  style="margin-bottom:10px;"
+>
+  👥 CLIENTE NUEVO +20
+</button>
 
+<button
+  type="button"
+  onclick="canjearCorte(${cliente.id})"
+  style="
+    margin-top:15px;
+    background:#151515;
+    border:1px solid #d4af5f;
+  "
+>
+  🎁 CANJEAR CORTE GRATIS -100
+</button>
         <p
           id="mensajePuntos"
           style="
@@ -781,7 +793,64 @@ async function sumarPuntos(clienteId, accion, puntos) {
   }
 
 }
+async function canjearCorte(clienteId) {
 
+  if (!confirm(
+    "¿Confirmás el canje de 100 puntos por un corte gratis?"
+  )) {
+    return;
+  }
+
+  try {
+
+    const token = localStorage.getItem("admin_token");
+
+    const respuesta = await fetch(
+      SUPABASE_URL + "/rest/v1/rpc/canjear_corte",
+      {
+        method: "POST",
+
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + token,
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          p_cliente_id: clienteId
+        })
+      }
+    );
+
+    if (!respuesta.ok) {
+
+      const error = await respuesta.text();
+
+      console.error(error);
+
+      alert(
+        "No se pudo realizar el canje. Verificá que el cliente tenga 100 puntos."
+      );
+
+      return;
+    }
+
+    alert(
+      "🎉 ¡Corte gratis canjeado correctamente!"
+    );
+
+    buscarClienteAdmin();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "No pudimos conectar con el servidor."
+    );
+
+  }
+}
 
 
 </script>
