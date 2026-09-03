@@ -298,7 +298,67 @@ async function buscarCliente() {
 
     const cliente = clientes[0];
 
- mensaje.innerHTML = `
+ const respuestaMovimientos = await fetch(
+  SUPABASE_URL +
+  "/rest/v1/movimientos?cliente_id=eq." +
+  cliente.id +
+  "&select=accion,puntos,created_at&order=created_at.desc",
+  {
+    method: "GET",
+    headers: {
+      "apikey": SUPABASE_KEY,
+      "Authorization": "Bearer " + SUPABASE_KEY
+    }
+  }
+);
+
+const movimientos = await respuestaMovimientos.json();
+
+let historialHTML = "";
+
+if (movimientos.length === 0) {
+
+  historialHTML = `
+    <p style="color:#888; margin-top:20px;">
+      Todavía no tenés movimientos.
+    </p>
+  `;
+
+} else {
+
+  historialHTML = `
+    <div style="margin-top:25px; text-align:left;">
+
+      <h3 style="color:#d4af5f; margin-bottom:15px;">
+        HISTORIAL
+      </h3>
+
+      ${movimientos.map(movimiento => `
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          padding:12px 0;
+          border-bottom:1px solid #292929;
+        ">
+
+          <span>
+            ${movimiento.accion}
+          </span>
+
+          <strong style="color:#d4af5f;">
+            ${movimiento.puntos > 0 ? "+" : ""}${movimiento.puntos} puntos
+          </strong>
+
+        </div>
+      `).join("")}
+
+    </div>
+  `;
+
+}
+
+mensaje.innerHTML = `
   <div style="
     margin-top: 20px;
     padding: 20px;
@@ -339,9 +399,10 @@ async function buscarCliente() {
       Te faltan ${Math.max(100 - cliente.puntos, 0)} puntos para tu corte gratis ✂️
     </p>
 
+    ${historialHTML}
+
   </div>
 `;
-
   } catch (error) {
 
     console.error(error);
