@@ -541,6 +541,93 @@ function mostrarPanelAdmin() {
   document.getElementById("panelAdmin").style.display = "block";
 
 }
+  async function buscarClienteAdmin() {
+
+  const whatsapp = document.getElementById("whatsappAdmin").value.trim();
+  const resultado = document.getElementById("resultadoAdmin");
+
+  if (!whatsapp) {
+    resultado.innerHTML = "Ingresá un WhatsApp.";
+    return;
+  }
+
+  try {
+
+    const token = localStorage.getItem("admin_token");
+
+    const respuesta = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/clientes?whatsapp=eq." +
+      encodeURIComponent(whatsapp) +
+      "&select=id,nombre,whatsapp,puntos",
+      {
+        method: "GET",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + token
+        }
+      }
+    );
+
+    const clientes = await respuesta.json();
+
+    if (!clientes.length) {
+
+      resultado.innerHTML = `
+        <p style="color:#aaa; text-align:center;">
+          No encontramos ningún cliente con ese WhatsApp.
+        </p>
+      `;
+
+      return;
+    }
+
+    const cliente = clientes[0];
+
+    resultado.innerHTML = `
+      <div style="
+        padding:20px;
+        background:#101010;
+        border:1px solid #d4af5f;
+        border-radius:16px;
+        text-align:center;
+      ">
+
+        <h2 style="color:#d4af5f;">
+          ${cliente.nombre}
+        </h2>
+
+        <p style="margin-top:10px; color:#aaa;">
+          WhatsApp: ${cliente.whatsapp}
+        </p>
+
+        <p style="
+          font-size:32px;
+          font-weight:bold;
+          margin:20px 0;
+        ">
+          ${cliente.puntos}
+          <span style="font-size:14px; color:#aaa;">
+            PUNTOS
+          </span>
+        </p>
+
+      </div>
+    `;
+
+  } catch (error) {
+
+    console.error(error);
+
+    resultado.innerHTML = `
+      <p style="color:#aaa;">
+        No pudimos buscar el cliente.
+      </p>
+    `;
+
+  }
+
+}
 </script>
 </body>
 </html>
